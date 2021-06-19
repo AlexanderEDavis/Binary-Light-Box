@@ -1,62 +1,94 @@
-function updateNumber(flag: number, column: number, difference: number) {
-    
-    Denary += difference
-    columns[column] = flag
-    Display(Denary)
+function updateNumber () {
+    Denary = 0
+    for (let item = 0; item <= columns.length - 1; item++) {
+        if (columns[item]) {
+            Denary += columnValues[item]
+        }
+    }
+    updateDisplay(Denary)
 }
-
-function Display(number: number) {
+function updateColumn () {
+    for (let item2 = 0; item2 <= columns.length - 1; item2++) {
+        updateFlag(item2, sensePins[item2])
+    }
+}
+function switchSensors () {
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        sensePins[0] = true
+    } else if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        sensePins[0] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P2) == 1) {
+        sensePins[1] = true
+    } else if (pins.digitalReadPin(DigitalPin.P2) == 0) {
+        sensePins[1] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P3) == 1) {
+        sensePins[2] = true
+    } else if (pins.digitalReadPin(DigitalPin.P3) == 0) {
+        sensePins[2] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P4) == 1) {
+        sensePins[3] = true
+    } else if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+        sensePins[3] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P6) == 1) {
+        sensePins[4] = true
+    } else if (pins.digitalReadPin(DigitalPin.P6) == 0) {
+        sensePins[4] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P7) == 1) {
+        sensePins[5] = true
+    } else if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+        sensePins[5] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P8) == 1) {
+        sensePins[6] = true
+    } else if (pins.digitalReadPin(DigitalPin.P8) == 0) {
+        sensePins[6] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P9) == 1) {
+        sensePins[7] = true
+    } else if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+        sensePins[7] = false
+    }
+    if (pins.digitalReadPin(DigitalPin.P10) == 1) {
+        sensePins[8] = true
+    } else if (pins.digitalReadPin(DigitalPin.P10) == 0) {
+        sensePins[8] = false
+    }
+}
+function updateFlag (column: number, flag: boolean) {
+    if (flag) {
+        columns[column] = true
+    } else if (!(flag)) {
+        columns[column] = false
+    }
+}
+function updateDisplay (number: number) {
     serial.writeString("/")
     serial.writeNumber(number)
 }
-
 let Denary = 0
-let columns : number[] = []
-serial.redirect(SerialPin.P0, SerialPin.P16, BaudRate.BaudRate9600)
-columns = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+let columnValues: number[] = []
+let columns: boolean[] = []
+let sensePins: boolean[] = []
+serial.redirect(
+SerialPin.P0,
+SerialPin.P16,
+BaudRate.BaudRate9600
+)
+sensePins = [false, false, false, false, false, false, false, false, false]
+columns = [false, false, false, false, false, false, false, false, false]
+columnValues = [1, 2, 4, 8, 16, 32, 64, 128, 256]
 Denary = 0
-Display(Denary)
+updateDisplay(Denary)
 let ready = true
-basic.forever(function on_forever() {
+basic.forever(function () {
     if (ready) {
-        if (pins.digitalReadPin(DigitalPin.P1) == 1 && columns[0] == 0) {
-            updateNumber(1, 0, 1)
-        } else if (pins.digitalReadPin(DigitalPin.P1) == 0 && columns[0] == 1) {
-            updateNumber(0, 0, -1)
-        } else if (pins.digitalReadPin(DigitalPin.P2) == 1 && columns[1] == 0) {
-            updateNumber(1, 1, 2)
-        } else if (pins.digitalReadPin(DigitalPin.P2) == 0 && columns[1] == 1) {
-            updateNumber(0, 1, -2)
-        } else if (pins.digitalReadPin(DigitalPin.P3) == 1 && columns[2] == 0) {
-            updateNumber(1, 2, 4)
-        } else if (pins.digitalReadPin(DigitalPin.P3) == 0 && columns[2] == 1) {
-            updateNumber(0, 2, -4)
-        } else if (pins.digitalReadPin(DigitalPin.P4) == 1 && columns[3] == 0) {
-            updateNumber(1, 3, 8)
-        } else if (pins.digitalReadPin(DigitalPin.P4) == 0 && columns[3] == 1) {
-            updateNumber(0, 3, -8)
-        } else if (pins.digitalReadPin(DigitalPin.P6) == 1 && columns[4] == 0) {
-            updateNumber(1, 4, 16)
-        } else if (pins.digitalReadPin(DigitalPin.P6) == 0 && columns[4] == 1) {
-            updateNumber(0, 4, -16)
-        } else if (pins.digitalReadPin(DigitalPin.P7) == 1 && columns[5] == 0) {
-            updateNumber(1, 5, 32)
-        } else if (pins.digitalReadPin(DigitalPin.P7) == 0 && columns[5] == 1) {
-            updateNumber(0, 5, -32)
-        } else if (pins.digitalReadPin(DigitalPin.P8) == 1 && columns[6] == 0) {
-            updateNumber(1, 6, 64)
-        } else if (pins.digitalReadPin(DigitalPin.P8) == 0 && columns[6] == 1) {
-            updateNumber(0, 6, -64)
-        } else if (pins.digitalReadPin(DigitalPin.P9) == 1 && columns[7] == 0) {
-            updateNumber(1, 7, 128)
-        } else if (pins.digitalReadPin(DigitalPin.P9) == 0 && columns[7] == 1) {
-            updateNumber(0, 7, -128)
-        } else if (pins.digitalReadPin(DigitalPin.P10) == 1 && columns[8] == 0) {
-            updateNumber(1, 8, 256)
-        } else if (pins.digitalReadPin(DigitalPin.P10) == 0 && columns[8] == 1) {
-            updateNumber(0, 8, -256)
-        }
-        
+        switchSensors()
+        updateColumn()
+        updateNumber()
     }
-    
 })
