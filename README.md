@@ -1,5 +1,5 @@
 
-> Open this page at [https://alexanderedavis.github.io/binary-light-box/](https://alexanderedavis.github.io/binary-light-box/)
+> Open this page at [https://alexanderedavis.github.io/Binary-Light-Box/](https://alexanderedavis.github.io/Binary-Light-Box/)
 
 ## Use as Extension
 
