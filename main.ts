@@ -1,25 +1,23 @@
-function updateNumber (flag: number, column: number, difference: number) {
+function updateNumber(flag: number, column: number, difference: number) {
+    
     Denary += difference
     columns[column] = flag
     Display(Denary)
 }
-function Display (number: number) {
+
+function Display(number: number) {
     serial.writeString("/")
     serial.writeNumber(number)
 }
+
 let Denary = 0
-let columns: number[] = []
-let ready = false
-serial.redirect(
-SerialPin.P0,
-SerialPin.P16,
-BaudRate.BaudRate9600
-)
+let columns : number[] = []
+serial.redirect(SerialPin.P0, SerialPin.P16, BaudRate.BaudRate9600)
 columns = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 Denary = 0
 Display(Denary)
-ready = true
-basic.forever(function () {
+let ready = true
+basic.forever(function on_forever() {
     if (ready) {
         if (pins.digitalReadPin(DigitalPin.P1) == 1 && columns[0] == 0) {
             updateNumber(1, 0, 1)
@@ -58,5 +56,7 @@ basic.forever(function () {
         } else if (pins.digitalReadPin(DigitalPin.P10) == 0 && columns[8] == 1) {
             updateNumber(0, 8, -256)
         }
+        
     }
+    
 })
